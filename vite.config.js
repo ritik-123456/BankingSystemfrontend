@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://bankingsystem-backend-v51o.vercel.app',
+        target: 'http://localhost:3000',
         changeOrigin: true,
         secure: false
       }

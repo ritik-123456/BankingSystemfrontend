@@ -899,62 +899,77 @@ function App() {
       )}
 
       {/* TEST FAUCET MODAL */}
-      {showFaucetModal && (
-        <div className="modal-overlay">
-          <div className="modal-content glass-panel">
-            <button className="modal-close-btn" onClick={() => setShowFaucetModal(false)}>
-              <X size={20} />
-            </button>
-            <h3 className="modal-title">Test Funds Faucet</h3>
-            <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '20px' }}>
-              Fund your testing account with mock assets from the SimpleBank central system bank reservoir.
-            </p>
+      {showFaucetModal && (() => {
+        const selectedFaucetAccount = accounts.find(acc => acc._id === faucetToAccount);
+        const faucetCurrency = (() => {
+          if (!selectedFaucetAccount) return 'INR';
+          const metaStr = localStorage.getItem(`card_meta_${selectedFaucetAccount._id}`);
+          if (metaStr) {
+            try {
+              const meta = JSON.parse(metaStr);
+              return meta.currency || selectedFaucetAccount.currency || 'INR';
+            } catch (e) {}
+          }
+          return selectedFaucetAccount.currency || 'INR';
+        })();
 
-            <form onSubmit={handleFaucet}>
-              <div className="form-group">
-                <label className="form-label">Beneficiary Account</label>
-                <select 
-                  className="form-control"
-                  value={faucetToAccount}
-                  onChange={(e) => setFaucetToAccount(e.target.value)}
-                >
-                  {accounts.map((acc, idx) => {
-                    const metaStr = localStorage.getItem(`card_meta_${acc._id}`);
-                    const meta = metaStr ? JSON.parse(metaStr) : {
-                      bankName: 'SimpleBank',
-                      currency: acc.currency || 'INR'
-                    };
-                    return (
-                      <option key={acc._id} value={acc._id}>
-                        {meta.bankName || 'SimpleBank'} - {acc._id.slice(-8)} (Bal: {acc.balance.toLocaleString()} {meta.currency || acc.currency || 'INR'})
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Select Deposit Sum (INR)</label>
-                <select 
-                  className="form-control"
-                  value={faucetAmount}
-                  onChange={(e) => setFaucetAmount(e.target.value)}
-                >
-                  <option value="500">500 INR</option>
-                  <option value="5000">5,000 INR</option>
-                  <option value="10000">10,000 INR</option>
-                  <option value="50000">50,000 INR</option>
-                  <option value="100000">100,000 INR</option>
-                </select>
-              </div>
-
-              <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '16px' }} disabled={isFunding}>
-                {isFunding ? 'Logging into Faucet...' : 'Inject Test Funds'}
+        return (
+          <div className="modal-overlay">
+            <div className="modal-content glass-panel">
+              <button className="modal-close-btn" onClick={() => setShowFaucetModal(false)}>
+                <X size={20} />
               </button>
-            </form>
+              <h3 className="modal-title">Test Funds Faucet</h3>
+              <p style={{ fontSize: '14px', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+                Fund your testing account with mock assets from the SimpleBank central system bank reservoir.
+              </p>
+
+              <form onSubmit={handleFaucet}>
+                <div className="form-group">
+                  <label className="form-label">Beneficiary Account</label>
+                  <select 
+                    className="form-control"
+                    value={faucetToAccount}
+                    onChange={(e) => setFaucetToAccount(e.target.value)}
+                  >
+                    {accounts.map((acc, idx) => {
+                      const metaStr = localStorage.getItem(`card_meta_${acc._id}`);
+                      const meta = metaStr ? JSON.parse(metaStr) : {
+                        bankName: 'SimpleBank',
+                        currency: acc.currency || 'INR'
+                      };
+                      return (
+                        <option key={acc._id} value={acc._id}>
+                          {meta.bankName || 'SimpleBank'} - {acc._id.slice(-8)} (Bal: {acc.balance.toLocaleString()} {meta.currency || acc.currency || 'INR'})
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Select Deposit Sum ({faucetCurrency})</label>
+                  <select 
+                    className="form-control"
+                    value={faucetAmount}
+                    onChange={(e) => setFaucetAmount(e.target.value)}
+                  >
+                    <option value="500">500 {faucetCurrency}</option>
+                    <option value="5000">5,000 {faucetCurrency}</option>
+                    <option value="10000">10,000 {faucetCurrency}</option>
+                    <option value="50000">50,000 {faucetCurrency}</option>
+                    <option value="100000">100,000 {faucetCurrency}</option>
+                  </select>
+                </div>
+
+                <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: '16px' }} disabled={isFunding}>
+                  {isFunding ? 'Logging into Faucet...' : 'Inject Test Funds'}
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* ISSUE CARD MODAL */}
       {showIssueCardModal && (
