@@ -433,8 +433,8 @@ function App() {
 
       {/* Nav Bar */}
       <header className="navbar">
-        <div className="brand" onClick={() => setView(user ? 'dashboard' : 'landing')} style={{ cursor: 'pointer' }}>
-          <Wallet className="brand-icon" size={24} />
+        <div className="brand" onClick={() => setView(user ? 'dashboard' : 'landing')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img src="/favicon.svg" alt="Ledger Vault Logo" className="brand-logo-img" style={{ width: 30, height: 30, borderRadius: 8 }} />
           <span>Ledger Vault</span>
         </div>
         <div className="user-profile">
