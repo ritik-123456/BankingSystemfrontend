@@ -435,7 +435,7 @@ function App() {
       <header className="navbar">
         <div className="brand" onClick={() => setView(user ? 'dashboard' : 'landing')} style={{ cursor: 'pointer' }}>
           <Wallet className="brand-icon" size={24} />
-          <span>SimpleBank Ledger</span>
+          <span>Ledger Vault</span>
         </div>
         <div className="user-profile">
           {user ? (
@@ -540,7 +540,7 @@ function App() {
         <main className="auth-container">
           <div className="auth-card glass-panel">
             <h2 className="auth-title">Establish Ledger Profile</h2>
-            <p className="auth-subtitle">Open secure digital vaults on SimpleBank Ledger today</p>
+            <p className="auth-subtitle">Open secure digital vaults on Ledger Vault today</p>
             <form onSubmit={handleRegister}>
               <div className="form-group">
                 <label className="form-label">Full Name</label>
